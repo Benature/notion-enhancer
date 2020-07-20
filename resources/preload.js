@@ -11,11 +11,11 @@
 
 // DO NOT REMOVE THE MARKERS ABOVE.
 
-require('electron').remote.getGlobal('setTimeout')(() => {
-  const fs = require('fs'),
-    path = require('path'),
-    store = require(path.join(__dirname, '..', 'store.js'))({
-      config: 'user-preferences',
+require("electron").remote.getGlobal("setTimeout")(() => {
+  const fs = require("fs"),
+    path = require("path"),
+    store = require(path.join(__dirname, "..", "store.js"))({
+      config: "user-preferences",
       defaults: {
         openhidden: false,
         maximized: false,
@@ -24,34 +24,34 @@ require('electron').remote.getGlobal('setTimeout')(() => {
         emoji: false,
       },
     }),
-    isMac = process.platform === 'darwin';
+    isMac = process.platform === "darwin";
 
   const intervalID = setInterval(injection, 100);
   function injection() {
-    if (document.querySelector('div.notion-topbar > div') == undefined) return;
+    if (document.querySelector("div.notion-topbar > div") == undefined) return;
     clearInterval(intervalID);
 
     /* style injection */
-    const head = document.getElementsByTagName('head')[0],
-      css = ['user'];
-    if (store.theme) css.push('theme');
+    const head = document.getElementsByTagName("head")[0],
+      css = ["user"];
+    if (store.theme) css.push("theme");
     css.forEach((file) => {
       file = fs.readFileSync(`☃☃☃resources☃☃☃/${file}.css`); // will be set by python script
-      let style = document.createElement('style');
-      style.type = 'text/css';
+      let style = document.createElement("style");
+      style.type = "text/css";
       style.innerHTML = file;
       head.appendChild(style);
     });
-    document.body.classList.add('enhanced');
+    document.body.classList.add("enhanced");
 
-    const appwindow = require('electron').remote.getCurrentWindow();
+    const appwindow = require("electron").remote.getCurrentWindow();
 
     /* titlebar */
-    const buttons = document.createElement('span'),
-      dragarea = document.createElement('div');
-    dragarea.className = 'window-dragarea';
-    document.querySelector('.notion-topbar').prepend(dragarea);
-    buttons.className = 'window-buttons-area';
+    const buttons = document.createElement("span"),
+      dragarea = document.createElement("div");
+    dragarea.className = "window-dragarea";
+    document.querySelector(".notion-topbar").prepend(dragarea);
+    buttons.className = "window-buttons-area";
     buttons.innerHTML = `
       <button class="window-button btn-alwaysontop"></button>
     `;
@@ -65,25 +65,25 @@ require('electron').remote.getGlobal('setTimeout')(() => {
       .querySelector('.notion-topbar > div[style*="display: flex"]')
       .appendChild(buttons);
     document
-      .querySelector('.notion-history-back-button')
+      .querySelector(".notion-history-back-button")
       .parentElement.nextElementSibling.classList.add(
-        'notion-topbar-breadcrumb'
+        "notion-topbar-breadcrumb"
       );
     document
-      .querySelector('.notion-topbar-share-menu')
-      .parentElement.classList.add('notion-topbar-actions');
+      .querySelector(".notion-topbar-share-menu")
+      .parentElement.classList.add("notion-topbar-actions");
 
     const button_icons_raw = {
         alwaysontop_on: fs.readFileSync(
-          '☃☃☃resources☃☃☃/icons/alwaysontop_on.svg'
+          "☃☃☃resources☃☃☃/icons/alwaysontop_on.svg"
         ),
         alwaysontop_off: fs.readFileSync(
-          '☃☃☃resources☃☃☃/icons/alwaysontop_off.svg'
+          "☃☃☃resources☃☃☃/icons/alwaysontop_off.svg"
         ),
-        minimize: fs.readFileSync('☃☃☃resources☃☃☃/icons/minimise.svg'),
-        maximize_on: fs.readFileSync('☃☃☃resources☃☃☃/icons/maximise_on.svg'),
-        maximize_off: fs.readFileSync('☃☃☃resources☃☃☃/icons/maximise_off.svg'),
-        close: fs.readFileSync('☃☃☃resources☃☃☃/icons/close.svg'),
+        minimize: fs.readFileSync("☃☃☃resources☃☃☃/icons/minimise.svg"),
+        maximize_on: fs.readFileSync("☃☃☃resources☃☃☃/icons/maximise_on.svg"),
+        maximize_off: fs.readFileSync("☃☃☃resources☃☃☃/icons/maximise_off.svg"),
+        close: fs.readFileSync("☃☃☃resources☃☃☃/icons/close.svg"),
       },
       button_icons = {
         alwaysontop() {
@@ -120,7 +120,7 @@ require('electron').remote.getGlobal('setTimeout')(() => {
         close(event = null) {
           if (
             store.tray &&
-            require('electron').remote.BrowserWindow.getAllWindows().length ===
+            require("electron").remote.BrowserWindow.getAllWindows().length ===
               1
           ) {
             if (event) event.preventDefault();
@@ -129,10 +129,10 @@ require('electron').remote.getGlobal('setTimeout')(() => {
         },
       },
       button_elements = {
-        alwaysontop: document.querySelector('.window-button.btn-alwaysontop'),
-        minimize: document.querySelector('.window-button.btn-minimize'),
-        maximize: document.querySelector('.window-button.btn-maximize'),
-        close: document.querySelector('.window-button.btn-close'),
+        alwaysontop: document.querySelector(".window-button.btn-alwaysontop"),
+        minimize: document.querySelector(".window-button.btn-minimize"),
+        maximize: document.querySelector(".window-button.btn-maximize"),
+        close: document.querySelector(".window-button.btn-close"),
       };
 
     button_elements.alwaysontop.innerHTML = button_icons.alwaysontop();
@@ -157,14 +157,14 @@ require('electron').remote.getGlobal('setTimeout')(() => {
     if (store.emoji) {
       const observer = new MutationObserver((list, observer) => {
         document
-          .querySelectorAll('.notion-record-icon .notion-emoji')
+          .querySelectorAll(".notion-record-icon .notion-emoji")
           .forEach((el) => {
             el.outerHTML = `<span style="font-size: 0.9em; position: relative; bottom: 0.1em; right: 0.05em">
-                ${el.getAttribute('alt')}
+                ${el.getAttribute("alt")}
               </span>`;
           });
-        document.querySelectorAll('.notion-emoji').forEach((el) => {
-          el.outerHTML = `<span>${el.getAttribute('alt')}</span>`;
+        document.querySelectorAll(".notion-emoji").forEach((el) => {
+          el.outerHTML = `<span>${el.getAttribute("alt")}</span>`;
         });
       });
       observer.observe(document, {
@@ -179,14 +179,14 @@ require('electron').remote.getGlobal('setTimeout')(() => {
     )
       .then((res) => res.json())
       .then((res) => {
-        const local_version = '☃☃☃version☃☃☃'.split('~')[0],
+        const local_version = "☃☃☃version☃☃☃".split("~")[0],
           repo_version = res.tag_name.slice(1);
         // compare func from https://github.com/substack/semver-compare
         if (
           local_version != repo_version &&
           [local_version, repo_version].sort((a, b) => {
-            var pa = a.split('.');
-            var pb = b.split('.');
+            var pa = a.split(".");
+            var pb = b.split(".");
             for (var i = 0; i < 3; i++) {
               var na = Number(pa[i]);
               var nb = Number(pb[i]);
@@ -198,14 +198,31 @@ require('electron').remote.getGlobal('setTimeout')(() => {
             return 0;
           })[0] == local_version
         )
-          alert('notion-enhancer update available!');
+          alert("notion-enhancer update available!");
       });
 
     /* hotkey: reload window */
     document.defaultView.addEventListener(
-      'keyup',
-      (ev) => void (ev.code === 'F5' ? appwindow.reload() : 0),
+      "keyup",
+      (ev) => void (ev.code === "F5" ? appwindow.reload() : 0),
       true
     );
+
+    /* user scripts: floating toc */
+    const tocObserver = new MutationObserver((list, observer) => {
+      const toc = document.querySelector(".notion-table_of_contents-block");
+      if (toc) {
+        const toc_p = toc.parentElement;
+        if (!toc_p.classList.contains("notion-column-block")) {
+          return;
+        }
+        toc_p.style.position = "sticky";
+        toc_p.style.top = "0";
+        toc_p.style.overflowY = "scroll";
+        toc_p.style.maxHeight = "50vh";
+      }
+    });
+    let notionApp = document.getElementById("notion-app");
+    tocObserver.observe(notionApp, { childList: true, subtree: true });
   }
 }, 100);
