@@ -208,7 +208,9 @@ require("electron").remote.getGlobal("setTimeout")(() => {
       true
     );
 
-    /* user scripts: floating toc */
+    /* user scripts: floating toc 
+       by: Ruter https://twitter.com/ruterlv/status/1284750187886338049?s=21
+    */
     const tocObserver = new MutationObserver((list, observer) => {
       const toc = document.querySelector(".notion-table_of_contents-block");
       if (toc) {
